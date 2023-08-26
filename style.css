@@ -1,0 +1,56 @@
+body{
+    background-color: rgba(0, 255, 255, 0.632);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.container{
+    width: 80%;
+    margin: auto;
+    text-align: center;
+}
+
+table, th, td{
+    border: 1px dashed black;
+    border-collapse: collapse;
+    margin: auto;
+    text-align: center;
+}
+
+th {
+    background-color: rgb(53, 40, 227);
+    position: sticky;
+    top: 0;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
+
+.item_id{
+    width: 100px;
+}
+
+.item_name{
+    width: 400px;
+}
+
+.item_mail{
+    width: 500px;
+}
+
+.pagination {
+    display: inline-block;
+    margin-bottom: 50px;
+}
+  
+.pagination a {
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 0.5px solid grey;
+    border-radius: 4px;
+    margin-left: 4px;
+    color: #337ABC;
+    margin-bottom: 10px;
+}
+
+.pagination .active{
+    background-color: #337ABC;
+    color: white;
+}
