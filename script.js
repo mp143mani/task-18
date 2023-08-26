@@ -1,132 +1,301 @@
-import { data } from './data.js';
+//Restapi urls
+let restcountries = "https://restcountries.com/v3.1/all";
 
-let dat = { "data": data }
+// creating html elements
 
-var main_cont = document.createElement("div")
-main_cont.classList.add("container")
+let inputContainer = document.createElement("div");                           //creating the input section
+let search = document.createElement("button");
+let input = document.createElement("input");
 
-let heading = document.createElement("h1")
-heading.innerHTML = "PAGINATION"
+   
 
-let table = document.createElement("table")
-table.classList.add("tab")
+ 
+inputContainer.setAttribute("class","container input-group my-5 px-0 ");                // setting the attribute 
 
-let th1 = document.createElement("th")
-let th2 = document.createElement("th")
-let th3 = document.createElement("th")
+search.setAttribute("class","btn btn-outline-primary  py-2 px-sm-4 fs-md-5 fs-6  ");
+search.setAttribute("type","button");
+search.innerHTML = "  submit"
 
-var tr_head = document.createElement("tr")
-let idhead = document.createElement("p")
-idhead.innerHTML = "ID"
-let namehead = document.createElement("p")
-namehead.innerHTML = "Name"
-let mailhead = document.createElement("p")
-mailhead.innerHTML = "Email"
-
-th1.append(idhead)
-th2.append(namehead)
-th3.append(mailhead)
-tr_head.append(th1, th2, th3)
+input.setAttribute("class","form-control ");
+input.setAttribute("id","entries");
+input.setAttribute("type","text");
+input.setAttribute("placeholder","Enter a country name ");
 
 
-function items(obj, count, page) {
 
-    table.appendChild(tr_head)
+inputContainer.append(search,input);
 
-    for (let i = ((0 + 1) * (page - 1)) * 10; i < count * page; i++) {
+let inputsection = document.getElementById("inputsection");                    // appending the input section 
+inputsection.appendChild(inputContainer);
 
-        var tr = document.createElement("tr")
-        var td1 = document.createElement("td")
-        var td2 = document.createElement("td")
-        var td3 = document.createElement("td")
+search.addEventListener("click",userEntry)
 
-        let item_id = document.createElement("div")
-        item_id.classList.add("item_id")
-        let id = document.createElement("p")
-        id.innerHTML = obj.data[i].id
-        item_id.append(id)
 
-        let item_name = document.createElement('div')
-        item_name.classList.add("item_name")
-        let name = document.createElement("p")
-        name.innerHTML = obj.data[i].name
-        item_name.append(name)
 
-        let item_mail = document.createElement('div')
-        item_mail.classList.add("item_mail")
-        let mail = document.createElement("p")
-        mail.innerHTML = obj.data[i].email
-        item_mail.append(mail)
+for(let c=1;c<=3;c++){
 
-        td1.append(item_id)
-        td2.append(item_name)
-        td3.append(item_mail)
-        tr.append(td1, td2, td3)
-        table.append(tr)
+    let columncontainer = document.createElement("div");                           // creating the three weather card section using for loop
+    let cards = document.createElement("div");                   
+    let cardHeader = document.createElement("div");
+    let flagContainer = document.createElement("div");
+    let countryFlag = document.createElement("img");
+    let cardBody = document.createElement("div");
+    let cityDescription = document.createElement("div");
+    
+    for(let i=0;i<=2;i++){
+        let spanDescription = document.createElement("span");
+        cityDescription.appendChild(spanDescription);
     }
+    
+    let weatherButton = document.createElement("button");
+    var infoWeather = document.createElement("div");
+
+
+ 
+    
+    
+    
+    columncontainer.setAttribute("class","col-lg-4 col-sm-12 col-md ");                                 //setting the attributes
+    cards.setAttribute( "class","card  d-flex fs-5 fw-bold shadow-lg  bg-transparent h-100 ");
+    cards.setAttribute( "id",`country${c}`)
+    cardHeader.setAttribute("class","card-header bg-black text-success text-center mb-2 w-100");
+    cardHeader.setAttribute("id",`name${c}`);
+    flagContainer.setAttribute( "class","mx-3 shadow-lg ")
+    countryFlag.setAttribute("class","card-img-top ")
+    countryFlag.setAttribute("id",`img${c}`);
+    countryFlag.setAttribute("alt","Card image");
+    cardBody.setAttribute("class","card-body d-flex flex-column mx-auto");
+    cityDescription.setAttribute("class","d-flex flex-column text-center mb-3 gap-1 fw-bolder ");
+    cityDescription.setAttribute("id",`city${c}`);
+    weatherButton.setAttribute("class","btn btn-primary");
+     
+    infoWeather.setAttribute("class","text-center bg-secondary bg-opacity-75 text-white shadow-lg")
+    infoWeather.setAttribute("id",`weather${c}`)
+    
+    weatherButton.innerHTML = "click here for weather"
+    cardHeader.innerHTML = "country"
+    
+
+    cardBody.append(cityDescription,weatherButton)
+    flagContainer.append(countryFlag);
+    cards.append(cardHeader,flagContainer,cardBody,infoWeather);
+    columncontainer.appendChild(cards);
+    
+
+    weatherButton.addEventListener("click",function(){        //adding event listener to get the weather details
+
+
+                                                        let countryName =document.getElementById(`name${c}`).innerText
+                                                        infoWeather = document.getElementById(`weather${c}`)
+
+                                                        console.log(countryName)
+
+                                                        let weather = `https://api.openweathermap.org/data/2.5/weather?q=${countryName}&appid=b6479c9249d4d6aacd122a874e4bd785`
+                                                        
+                                                        countryWeather('GET',weather,infoWeather);
+
+
+                                                     })
+
+    let cardSection = document.getElementById("cardsection");
+    cardSection.appendChild(columncontainer);
+
+
+   
 
 }
 
-let pager = document.createElement("div")
-pager.classList.add("pagination")
-
-var current_page = 1;
-var p_count = 10;
-
-function pageNum(page, sam) {
-    if (sam) {
-        let cp = document.getElementById(`${current_page}`)
-        cp.classList.add("active")
-        cp.classList.remove("active")
-    }
-    if (page == 0) {
-        if (current_page != 1) {
-            current_page--
-        }
-    } else if (page == -1) {
-        if (current_page < 10) {
-            current_page++
-        }
-    } else {
-        current_page = page
-    }
-    if (sam) {
-        let cp = document.getElementById(`${current_page}`)
-        cp.classList.add("active")
-    }
-    table.innerHTML = ""
-    items(dat, p_count, current_page)
-}
-
-let prev = document.createElement("a")
-prev.innerHTML = "Previous"
-prev.href = "#"
-prev.onclick = function () { pageNum(0, true) }
-pager.append(prev)
-
-let page_count = dat.data.length / p_count
-
-for (let i = 0; i < page_count; i++) {
-    let num = document.createElement("a")
-    num.innerHTML = `${i + 1}`
-    if (i == 0) {
-        num.classList.add("active")
-    }
-    num.href = "#"
-    num.id = `${i + 1}`
-    num.onclick = function () { pageNum(i + 1, true) }
-    pager.append(num)
-}
 
 
-pageNum(1)
-
-let next = document.createElement("a")
-next.innerHTML = "Next"
-next.href = "#"
-next.onclick = function () { pageNum(-1, true) }
-pager.append(next)
 
 
-main_cont.append(heading, pager, table)
-document.body.append(main_cont)
+
+
+//scripting for calcution 
+
+
+
+
+let image1 = document.getElementById ("img1");               // getting  elements to enter country name,flag,capital
+let image2 = document.getElementById ("img2");
+let image3 = document.getElementById ("img3");
+
+let name1 = document.getElementById ("name1");              
+let name2 = document.getElementById ("name2");
+let name3 = document.getElementById ("name3");
+
+let city1 = document.getElementById ("city1");                 
+let city2 = document.getElementById ("city2");
+let city3 = document.getElementById ("city3");
+
+let i = Math.ceil(Math.random()*100+10).toFixed(0);         //choosing a random number to display country cards 
+let j = Math.ceil(Math.random()*100+10).toFixed(0);
+let k = Math.ceil(Math.random()*100+10).toFixed(0);
+//  console.log(i,j,k);
+
+
+let countries;             // defining the global varible for country data
+
+function gettingCountryName(method,url){                    //function to get a random three countries from the rest country 
+
+
+
+                                    var data = new XMLHttpRequest ()       ////XMLhttp request  to the restcountries api
+                                    data.open(method,url)
+                                    data.send()
+                                    data.onload = function (){
+                                                     countries = JSON.parse(data.response)
+
+                                                        image1.src = countries[i].flags.svg            // getting the country flag 
+                                                        image2.src = countries[j].flags.svg
+                                                        image3.src = countries[k].flags.svg
+
+                                                        name1.innerText = countries[i].name.common     // getting the country name
+                                                        name2.innerText = countries[j].name.common
+                                                        name3.innerText = countries[k].name.common
+
+
+
+                                                        // assigning the country description
+
+                                                        city1.firstElementChild.innerText = `Capital: ${countries[i].capital[0]}`;                 // getting the country capital   
+                                                        city1.firstElementChild.nextElementSibling.innerText =`Region: ${countries[i].region}`;     // getting the country region
+                                                        city1.lastElementChild.innerText = `Country code: ${countries[i].cca3}`;                    // getting the country code
+
+                                                        city2.firstElementChild.innerText = `Capital: ${countries[j].capital[0]}`;                 
+                                                        city2.firstElementChild.nextElementSibling.innerText =`Region: ${countries[j].region}`;
+                                                        city2.lastElementChild.innerText = `Country code: ${countries[j].cca3}`;
+
+                                                        city3.firstElementChild.innerText = `Capital: ${countries[k].capital[0]}`;
+                                                        city3.firstElementChild.nextElementSibling.innerText =`Region: ${countries[k].region}`;
+                                                        city3.lastElementChild.innerText = `Country code: ${countries[k].cca3}`;
+                                                        }  
+
+
+                                    }
+
+
+
+
+function countryWeather(method,url,weather){          //function to get today weather details
+
+                                        var data = new XMLHttpRequest ()    //XMLhttp request  to the weather api
+                                        data.open(method,url)
+                                        data.send()
+                                        data.onload = function (){
+
+                                                                let countries = JSON.parse(data.response ) ;
+                                                                weather.innerText = `Temp: ${countries.main.temp}
+                                                                Humidity: ${countries.main.humidity}
+                                                                Wind: ${countries.wind.speed}`;
+
+                                                                //console.log(countries)  
+
+                                                                }  
+                                            }
+
+
+
+
+
+
+function userEntry(){                                // function to get user input for the country name
+
+
+                let entered = document.getElementById('entries').value
+                let weather = document.getElementById('weather1')
+
+                            
+
+for(let q=0;q<=1;q++){                                               //loop to match the user input country name
+
+
+    if(q==0){
+
+
+                for(let l=0;l<=249;l++){                             //loop to update the 1st card value for the matched user input country name
+            
+                        if(entered==countries[l].name.common){
+
+                        image1.src = countries[l].flags.svg
+                        name1.innerText = countries[l].name.common
+
+                        city1.firstElementChild.innerText = `Capital: ${countries[l].capital[0]}`;
+                        city1.firstElementChild.nextElementSibling.innerText =`Region: ${countries[l].region}`;
+                        city1.lastElementChild.innerText = `Country code: ${countries[l].cca3}`;
+
+
+                        weather.innerText =  "";
+
+
+
+                        //    console.log(countries[l].name.common);
+                return
+            }}}
+
+
+                     else(alert(`please enter valid country            
+name in camel case`))                                                           //to alert the user to enter the valid data
+
+
+}}
+
+
+
+
+
+
+window.addEventListener("keydown", enteredKey);             // adding a keybord listener for user input     
+
+
+
+function enteredKey(e){                                 // function to get user input by key board
+
+
+
+                                let entered = document.getElementById('entries').value;
+
+
+
+    if(e.key==="Enter"){                                    // giving access to the user data
+
+                                let weather = document.getElementById('weather1')
+
+
+                            
+            for(let q=0;q<=1;q++){                                                           //loop to update the 1st card value for the matched user input country name
+
+                     if(q==0){
+
+                              for(let l=0;l<=249;l++){
+
+                                     if(entered==countries[l].name.common){
+
+                                            image1.src = countries[l].flags.svg
+                                            name1.innerText = countries[l].name.common
+
+                                            city1.firstElementChild.innerText = `Capital: ${countries[l].capital[0]}`;
+                                            city1.firstElementChild.nextElementSibling.innerText =`Region: ${countries[l].region}`;
+                                            city1.lastElementChild.innerText = `Country code: ${countries[l].cca3}`;
+
+                                            weather.innerText =  "" ;
+
+
+                                            //    console.log(countries[l].name.common);
+
+                                        return
+                                    }} }
+
+                                        else(alert(`please enter valid country 
+Name in camel case`))                                                                                      //to alert the user to enter the valid data
+
+
+                                    }}
+                                
+                                
+                    }
+
+
+
+
+window.onload = gettingCountryName('GET',restcountries);
