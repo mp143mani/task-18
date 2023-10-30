@@ -32,7 +32,7 @@ search.addEventListener("click",userEntry)
 
 
 
-for(let c=1;c<=3;c++){
+for(let c=1;c<=1;c++){
 
     let columncontainer = document.createElement("div");                           // creating the three weather card section using for loop
     let cards = document.createElement("div");                   
